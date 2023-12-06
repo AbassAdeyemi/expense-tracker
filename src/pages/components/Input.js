@@ -4,7 +4,7 @@ export function Input({errorMessage, onChange, id, ...inputProps}) {
  //   console.log(inputProps)
     return (
         <div className='formInput'>
-            <input {...inputProps} onChange={onChange}/>
+            <input className='registerInput' {...inputProps} onChange={onChange}/>
             {/*<span>{errorMessage}</span>*/}
         </div>
     )

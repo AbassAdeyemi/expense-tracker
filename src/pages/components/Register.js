@@ -56,14 +56,14 @@ export default function Register({
 
     return (
         <div className='register'>
-            <form onSubmit={handleSubmit}>
+            <form className='registerForm' onSubmit={handleSubmit}>
                 {inputs.map((input)=>(
                         <Input key={input.id} {...input} value={values[input.name]} onChange={onChange} />
 
                     )
                 )}
 
-                <button>Register</button>
+                <button className='registerButton'>Register</button>
 
             </form>
         </div>
