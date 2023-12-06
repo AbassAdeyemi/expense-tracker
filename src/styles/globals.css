@@ -1,0 +1,92 @@
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+header{
+    /* background-color: #a892ee; */
+    background-color: #40005d;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+main{display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40em ;
+
+}
+
+footer{
+    background-color: #40005d;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.formInput{
+    padding: 10px;
+    margin: 10px 0px;
+}
+
+input{
+    padding: 20px;
+    margin:5px 0px;
+    font: inherit;
+    /* padding: 0.5rem; */
+    border-radius: 5px;
+    border: 1px solid #40005d;
+    background-color: #fff;
+}
+
+
+/* .register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+} */
+
+form{
+    width: 380px;
+    background-color: #a892ee;
+    padding: 0px 60px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+button{
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    border: none;
+    background-color: #40005d;
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 30px;
+
+}
+
+
+span{
+    font-size: 12px;
+    padding: 3px;
+    color: red;
+    display: none;
+}
+
+input:valid ~ span{
+    display: block;
+}
