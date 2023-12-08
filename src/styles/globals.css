@@ -3,32 +3,39 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    background-attachment: fixed;
 
 }
 
 header{
     /* background-color: #a892ee; */
-    background-color: #40005d;
+    /*background-color: #40005d;*/
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #474bff;
+    font-width: bold;
 
 }
 main{display: flex;
     justify-content: center;
     align-items: center;
-    height: 40em ;
+    height: 55em ;
+  background: conic-gradient(from -60deg at 50% calc(100%/3),#474bff 0 120deg,#0000 0), conic-gradient(from 120deg at 50% calc(200%/3),#474bff 0 120deg,#0000 0), conic-gradient(from  60deg at calc(200%/3),#474bff 60deg,#adafff 0 120deg,#0000 0),
+conic-gradient(from 180deg at calc(100%/3),#fff 60deg,#474bff 0 120deg,#0000 0),
+  linear-gradient(90deg,#fff calc(100%/6),#adafff 0 50%, #fff 0 calc(500%/6), #adafff 0);
+    background-size: 125px 72px;
 
 }
 
 footer{
-    background-color: #40005d;
+    /*background-color: #40005d;*/
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 16em;
+    /*margin-top: 16em;*/
 
 }
 
@@ -38,13 +45,15 @@ footer{
 }
 
 .registerInput{
-    padding: 20px;
+    padding: 20px 40px;
     margin:5px 0px;
     font: inherit;
     /* padding: 0.5rem; */
+    background: rgba(255,255,255,0.8);
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    border: 1px solid rgba(255,255,255,0.4);
     border-radius: 5px;
-    border: 1px solid #40005d;
-    background-color: #fff;
 }
 
 
@@ -57,11 +66,56 @@ footer{
 
 .registerForm {
     width: 380px;
-    background-color: #a892ee;
+    /*background-color: #a892ee;*/
     padding: 0px 60px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    animation: myAnim 2s ease 0s 1 normal forwards;
+}
+
+@keyframes myAnim {
+    0% {
+        animation-timing-function: ease-in;
+        opacity: 0;
+        transform: translateY(-250px);
+    }
+
+    38% {
+        animation-timing-function: ease-out;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    55% {
+        animation-timing-function: ease-in;
+        transform: translateY(-65px);
+    }
+
+    72% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
+
+    81% {
+        animation-timing-function: ease-in;
+        transform: translateY(-28px);
+    }
+
+    90% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
+
+    95% {
+        animation-timing-function: ease-in;
+        transform: translateY(-8px);
+    }
+
+    100% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
 }
 
 .registerButton{

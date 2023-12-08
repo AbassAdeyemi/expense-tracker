@@ -26,12 +26,10 @@ export default function Home() {
     })
 
     const registerChangeHandler = (e) => {
-      // console.log("name: ", e.target)
         setRegisterFormValues({...registerFormValues, [e.target.name]: e.target.value})
     }
 
     const expenseChangeHandler = (e) => {
-        console.log("name: ", e.target.name)
         setExpenseFormValues({...expenseFormValues, [e.target.name]: e.target.value})
     }
 
@@ -43,12 +41,9 @@ export default function Home() {
 
             if (web5 && did) {
                 await configureProtocol(web5, did);
-                const userInfo = await fetchUserInfo(web5)
-                setIsAReturningUser(userInfo.length > 0)
-            }
-            if(isAReturningUser) {
-                const expenses = await fetchExpenses(web5)
-                setExpenses(expenses)
+                await fetchUserInfo(web5)
+                const e = await fetchExpenses(web5)
+                setExpenses(e)
             }
         };
         initWeb5();
@@ -157,21 +152,32 @@ export default function Home() {
                 })
             );
             console.log(userInfo, "I received user info");
+            setIsAReturningUser(userInfo.length > 0)
             return userInfo;
         } else {
             console.log("error", response.status);
         }
     };
 
-    const deleteUserInfo = async (web5) => {
-        const response = await web5.dwn.records.delete({
+    // const deleteUserInfo = async (web5) => {
+    //     const response = await web5.dwn.records.delete({
+    //         message: {
+    //             filter: {
+    //                 protocol: "https://example.com/expense-protocol",
+    //                 schema: "https://example.com/userInfo",
+    //             },
+    //         },
+    //     });
+    // }
+
+    const expenseDeleteHandler = async (recordId) => {
+        await web5.dwn.records.delete({
             message: {
-                filter: {
-                    protocol: "https://example.com/expense-protocol",
-                    schema: "https://example.com/userInfo",
-                },
-            },
-        });
+                recordId: recordId
+            }
+        })
+        const result = await fetchExpenses(web5);
+        setExpenses(result);
     }
 
     const constructExpense = (expense) => {
@@ -202,13 +208,18 @@ export default function Home() {
                     protocol: "https://example.com/expense-protocol",
                     schema: "https://example.com/expense",
                 },
-            },
+                pagination: {
+                    limit: 5
+                },
+                dateSort: 'createdDescending'
+            }
         });
 
         if (response.status.code === 200) {
             const expense = await Promise.all(
                 response.records.map(async (record) => {
-                    return await record.data.json();
+                    const data = await record.data.json();
+                    return {...data, id: record.id}
                 })
             );
             console.log(expense, "I received expenses");
@@ -223,7 +234,6 @@ export default function Home() {
         const userInfo = constructUserInfo(registerFormValues);
         await writeUserInfoToDwn(userInfo);
         Object.keys(registerFormValues).forEach(key => registerFormValues[key] = "")
-        console.log(registerFormValues)
         setRegisterFormValues(registerFormValues)
         const records = await fetchUserInfo(web5);
         setIsAReturningUser(records.length > 0);
@@ -235,15 +245,15 @@ export default function Home() {
         await writeExpenseToDwn(expense);
         Object.keys(expenseFormValues).forEach(key => expenseFormValues[key] = "")
         setExpenseFormValues(expenseFormValues)
-        const records = await fetchExpenses(web5);
-        setExpenses(records)
+        const result = await fetchExpenses(web5);
+        setExpenses(result)
     }
 
     return (
         <div>
-            {/*<header>*/}
-            {/*    Expense Tracker*/}
-            {/*</header>*/}
+            <header>
+                Expense Tracker
+            </header>
             <main>
                 {
                     isAReturningUser ?
@@ -251,6 +261,7 @@ export default function Home() {
                                         values={expenseFormValues}
                                         handleSubmit={expenseSubmitHandler}
                                         expenses={expenses}
+                                        handleDelete={expenseDeleteHandler}
                         />
                         :
                         <Register onChange={registerChangeHandler}
@@ -259,9 +270,9 @@ export default function Home() {
                         />
                 }
             </main>
-            {/*<footer>*/}
-            {/*    Vibranium*/}
-            {/*</footer>*/}
+            <footer>
+                Vibranium
+            </footer>
 
         </div>
 

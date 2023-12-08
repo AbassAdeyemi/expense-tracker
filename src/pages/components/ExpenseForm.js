@@ -5,20 +5,16 @@ export default function ExpenseForm({onChange, values, handleSubmit}) {
         <form onSubmit={handleSubmit}>
             <div className="new-expense__controls">
                 <div className="new-expense__control">
-                    <label>Item</label>
-                    <input type="text" name="item" value={values.item} onChange={onChange} required/>
+                    <input type="text" name="item" placeholder="Item" value={values["item"]} onChange={onChange} required/>
                 </div>
                 <div className="new-expense__control">
-                    <label>Amount</label>
-                    <input type="number" name="amount" value={values["amount"]} min="0" onChange={onChange}/>
+                    <input type="number" name="amount" placeholder="Amount" value={values["amount"]} min="0" onChange={onChange}/>
                 </div>
                 <div className="new-expense__control">
-                    <label>Date</label>
-                    <input type="date"  name="date" value={values["date"]} onChange={onChange}/>
+                    <input type="date"  name="date" placeholder="Date" value={values["date"]} onChange={onChange}/>
                 </div>
                 <div className="new-expense__control">
-                    <label>Category</label>
-                    <select  name="category" value={values["category"]} onChange={onChange}>
+                    <select  name="category"  value={values["category"]} onChange={onChange}>
                         <option value="food">Food</option>
                         <option value="housing">Housing</option>
                         <option value="shopping">Shopping</option>
