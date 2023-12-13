@@ -16,7 +16,7 @@ export default function ExpenseItem({date, item, amount, id, handleDelete}) {
 
                 <FontAwesomeIcon
                     icon={faTrash}
-                    style={{ fontSize: 30, color: "#fff",cursor:"pointer" }}
+                    style={{ fontSize: 30, color: "#fff", cursor:"pointer" }}
                     onClick = {() => handleDelete(id)}
                 />
 

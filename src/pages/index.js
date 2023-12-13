@@ -1,7 +1,9 @@
 import {Web5} from "@web5/api";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import Register from "@/pages/components/Register";
 import ExpenseTracker from "@/pages/components/ExpenseTracker";
+import {UserHelper} from "@/pages/helpers/UserHelper";
+import {ExpenseHelper} from "@/pages/helpers/ExpenseHelper";
 
 export default function Home() {
     const [web5, setWeb5] = useState(null)
@@ -33,6 +35,7 @@ export default function Home() {
         setExpenseFormValues({...expenseFormValues, [e.target.name]: e.target.value})
     }
 
+
     useEffect(() => {
         const initWeb5 = async () => {
             const {web5, did} = await Web5.connect();
@@ -41,9 +44,10 @@ export default function Home() {
 
             if (web5 && did) {
                 await configureProtocol(web5, did);
-                await fetchUserInfo(web5)
-                const e = await fetchExpenses(web5)
-                setExpenses(e)
+                const userRecords = await UserHelper.fetchUserInfo(web5)
+                setIsAReturningUser(userRecords.length > 0)
+                const expenseRecords = await ExpenseHelper.fetchExpenses(web5)
+                setExpenses(expenseRecords)
             }
         };
         initWeb5();
@@ -114,147 +118,34 @@ export default function Home() {
         }
     }
 
-    const constructUserInfo = (userInfo) => {
-        const currentDate = new Date().toLocaleDateString();
-        const currentTime = new Date().toLocaleTimeString();
-        return {
-            ...userInfo,
-            timestamp: `${currentDate} ${currentTime}`,
-        }
-    }
-
-    const writeUserInfoToDwn = async (userInfo) => {
-        await web5.dwn.records.write({
-            data: userInfo,
-            message: {
-                protocol: "https://example.com/expense-protocol",
-                protocolPath: "userInfo",
-                schema: "https://example.com/userInfo"
-            }
-        })
-
-    }
-
-    const fetchUserInfo = async (web5) => {
-        const response = await web5.dwn.records.query({
-            message: {
-                filter: {
-                    protocol: "https://example.com/expense-protocol",
-                    schema: "https://example.com/userInfo",
-                },
-            },
-        });
-
-        if (response.status.code === 200) {
-            const userInfo = await Promise.all(
-                response.records.map(async (record) => {
-                    return await record.data.json();
-                })
-            );
-            console.log(userInfo, "I received user info");
-            setIsAReturningUser(userInfo.length > 0)
-            return userInfo;
-        } else {
-            console.log("error", response.status);
-        }
-    };
-
-    // const deleteUserInfo = async (web5) => {
-    //     const response = await web5.dwn.records.delete({
-    //         message: {
-    //             filter: {
-    //                 protocol: "https://example.com/expense-protocol",
-    //                 schema: "https://example.com/userInfo",
-    //             },
-    //         },
-    //     });
-    // }
 
     const expenseDeleteHandler = async (recordId) => {
-        await web5.dwn.records.delete({
-            message: {
-                recordId: recordId
-            }
-        })
-        const result = await fetchExpenses(web5);
-        setExpenses(result);
+        const remainingRecords = await ExpenseHelper.deleteExpense(web5, recordId)
+        setExpenses(remainingRecords);
     }
-
-    const constructExpense = (expense) => {
-        const currentDate = new Date().toLocaleDateString();
-        const currentTime = new Date().toLocaleTimeString();
-        return {
-            ...expense,
-            timestamp: `${currentDate} ${currentTime}`,
-        }
-    }
-
-    const writeExpenseToDwn = async (expense) => {
-        await web5.dwn.records.write({
-            data: expense,
-            message: {
-                protocol: "https://example.com/expense-protocol",
-                protocolPath: "expense",
-                schema: "https://example.com/expense"
-            }
-        })
-
-    }
-
-    const fetchExpenses = async (web5) => {
-        const response = await web5.dwn.records.query({
-            message: {
-                filter: {
-                    protocol: "https://example.com/expense-protocol",
-                    schema: "https://example.com/expense",
-                },
-                pagination: {
-                    limit: 5
-                },
-                dateSort: 'createdDescending'
-            }
-        });
-
-        if (response.status.code === 200) {
-            const expense = await Promise.all(
-                response.records.map(async (record) => {
-                    const data = await record.data.json();
-                    return {...data, id: record.id}
-                })
-            );
-            console.log(expense, "I received expenses");
-            return expense;
-        } else {
-            console.error("error", response.status);
-        }
-    };
 
     const registerSubmitHandler = async (e) => {
         e.preventDefault();
-        const userInfo = constructUserInfo(registerFormValues);
-        await writeUserInfoToDwn(userInfo);
+        const userInfo = UserHelper.constructUserInfo(registerFormValues);
+        await UserHelper.writeUserInfoToDwn(web5, userInfo);
         Object.keys(registerFormValues).forEach(key => registerFormValues[key] = "")
         setRegisterFormValues(registerFormValues)
-        const records = await fetchUserInfo(web5);
+        const records = await UserHelper.fetchUserInfo(web5);
         setIsAReturningUser(records.length > 0);
     }
 
     const expenseSubmitHandler = async (e) => {
         e.preventDefault();
-        const expense = constructExpense(expenseFormValues)
-        await writeExpenseToDwn(expense);
+        const expense = ExpenseHelper.constructExpense(expenseFormValues)
+        await ExpenseHelper.writeExpenseToDwn(web5, expense);
         Object.keys(expenseFormValues).forEach(key => expenseFormValues[key] = "")
         setExpenseFormValues(expenseFormValues)
-        const result = await fetchExpenses(web5);
-        setExpenses(result)
+        const records = await ExpenseHelper.fetchExpenses(web5);
+        setExpenses(records)
     }
 
     return (
         <div>
-            <header>
-                Expense Tracker
-            </header>
-            <main>
                 {
                     isAReturningUser ?
                         <ExpenseTracker onChange={expenseChangeHandler}
@@ -269,10 +160,6 @@ export default function Home() {
                                   handleSubmit={registerSubmitHandler}
                         />
                 }
-            </main>
-            <footer>
-                Vibranium
-            </footer>
 
         </div>
 

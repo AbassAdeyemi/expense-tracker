@@ -1,0 +1,83 @@
+.from_To{
+    display: flex;
+    gap: 2em;
+}
+h3{
+    text-align: center;
+    color:#fff;
+    font-style: italic;
+    font-size: 30px;
+    animation: myAnim 2s ease 0s 2 normal forwards;
+
+}
+
+@keyframes myAnim {
+    0% {
+        animation-timing-function: ease-in;
+        opacity: 0;
+        transform: translateY(-250px);
+    }
+
+    38% {
+        animation-timing-function: ease-out;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    55% {
+        animation-timing-function: ease-in;
+        transform: translateY(-65px);
+    }
+
+    72% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
+
+    81% {
+        animation-timing-function: ease-in;
+        transform: translateY(-28px);
+    }
+
+    90% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
+
+    95% {
+        animation-timing-function: ease-in;
+        transform: translateY(-8px);
+    }
+
+    100% {
+        animation-timing-function: ease-out;
+        transform: translateY(0);
+    }
+}
+.date_chart h5{
+    text-align: center;
+    margin-bottom: 2em;
+    font-size: 1em;
+    color: #474bff;
+    margin-top: 3em;
+
+}
+.from_To input{
+    width: 25em;
+    height: 40px;
+    border-radius:5px;
+    box-shadow: none;
+    border: none;
+    padding: 10px;
+}
+
+.date_chart{
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+    color: #fff;
+}
+
+.from_To h4{
+    text-align: center ;
+}
