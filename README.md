@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Running the app
 
-First, run the development server:
+To start the app locally. Run the following command
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+You can also use the production version on [https://expense-tracker-black-kappa.vercel.app/](https://expense-tracker-black-kappa.vercel.app/)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Using the app
 
-## Learn More
+The app is basically divided into three pages
+1. **The Register page**
+2. **The Expenses page**
+3. **The Analytics page**
 
-To learn more about Next.js, take a look at the following resources:
+### 1. The Register page
+On this page:
+<p>You submit your personal information and your budget information.</p>
+<p>You can also decide to delete this information and enter a new one, but you 
+cannot enter this information twice without deleting the previous one.</p>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. The Expenses page
+On this page:
+<p>You can enter your expense detail</p>
+<p>You can also view your expense history with the latest entries prioritized</p>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 3. The Analytics page
+On this page:
+<p>You can view your budgetary information against your expenditure (monthly)</p>
+<p>You can view a chart detailing the distribution of your spending on different
+categories of items within your selected date range</p>
