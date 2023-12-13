@@ -35,15 +35,23 @@ export class UserHelper {
         if (response.status.code === 200) {
             const userInfo = await Promise.all(
                 response.records.map(async (record) => {
-                    return await record.data.json();
+                    const data = await record.data.json();
+                    return {...data, id: record.id}
                 })
             );
             console.log(userInfo, "I received user info");
-          //  setIsAReturningUser(userInfo.length > 0)
             return userInfo;
         } else {
             console.log("error", response.status);
         }
     };
+
+    static deleteUserInfo = async (web5, recordId) => {
+        await web5.dwn.records.delete({
+            message: {
+                recordId: recordId
+            }
+        })
+    }
 
 }

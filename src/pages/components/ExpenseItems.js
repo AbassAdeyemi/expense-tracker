@@ -1,6 +1,6 @@
 import ExpenseItem from "@/pages/components/ExpenseItem";
 
-export default function Expenses({expenses, handleDelete}) {
+export default function ExpenseItems({expenses, handleDelete}) {
     return (
         <div>
             <div className="expenses card">

@@ -26,6 +26,15 @@ const nextConfig = {
         }
         return config;
     },
+
+    // rewrites: async () => {
+    //     return [
+    //         {
+    //             source: '/compo',
+    //             destination: '/new-blog/:slug',
+    //         },
+    //     ]
+    // },
 };
 
 module.exports = nextConfig;

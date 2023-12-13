@@ -1,4 +1,4 @@
-import {UserHelper} from "@/pages/helpers/UserHelper";
+import {UserHelper} from "@/helpers/UserHelper";
 import dayjs from "dayjs";
 
 export class AnalyticsHelper {
@@ -43,20 +43,25 @@ export class AnalyticsHelper {
     static getInsight = async (web5) => {
         const expenses = await AnalyticsHelper.fetchMonthlyExpenseData(web5);
         const records = await UserHelper.fetchUserInfo(web5)
+        if(records.length === 0) {
+            return {
+                budgetStatement: ""
+            }
+        }
         const userInfo = records[0]
         const amountSpent = expenses.map(e => parseFloat(e.amount)).reduce((a, b) => a + b, 0)
-        const budgetStatement = AnalyticsHelper.getBudgetInsight(amountSpent, parseFloat(userInfo.budget))
+        const budgetStatement = AnalyticsHelper.getBudgetInsight(amountSpent, parseFloat(userInfo.budget), userInfo.currency)
         return {
             budgetStatement
         }
     }
 
-    static getBudgetInsight = (amountSpent, monthlyBudget) => {
+    static getBudgetInsight = (amountSpent, monthlyBudget, currency) => {
         if(amountSpent > monthlyBudget) {
-            return "You have exceeded your budget!!!. You have spent "+ amountSpent + " naira so far and your budget is"+ monthlyBudget;
+            return `You have exceeded your budget!!!. You have spent ${amountSpent} ${currency} so far and your budget is ${monthlyBudget} ${currency}`
         }
         else {
-            return `You have spent ${amountSpent} naira so far. You have ${monthlyBudget - amountSpent} naira left in your budget`
+            return `You have spent ${amountSpent} ${currency} so far. You have ${monthlyBudget - amountSpent} ${currency} naira left in your budget`
         }
     }
 }

@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
 import {Web5} from "@web5/api";
-import {AnalyticsHelper} from "@/pages/helpers/AnalyticsHelper";
+import {AnalyticsHelper} from "@/helpers/AnalyticsHelper";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import dayjs from "dayjs";
 import PieChart from "@/pages/components/PieChart";
+import _ from "lodash"
 
 Chart.register(CategoryScale);
 
@@ -43,12 +44,23 @@ export default function Analytics({}) {
         const from = dayjs(formValues.fromDate).format('YYYY-MM-DDTHH:mm:ss.SSS000')
         const to = dayjs(formValues.toDate).format('YYYY-MM-DDTHH:mm:ss.SSS000')
         const records = await AnalyticsHelper.fetchExpenseData(web5, from, to)
+        const group = _.groupBy(records, (record) => record.category)
+        const dataSet = [];
+        for (const key of Object.keys(group)) {
+            console.log("key", key)
+            const amounts = group[key].map(v => parseFloat(v.amount)).reduce((a, b) => a + b, 0)
+            const obj = {
+               category: key,
+                amount: amounts
+            }
+            dataSet.push(obj)
+        }
         setChartData({
-            labels: records.map((data) => data.category),
+            labels: dataSet.map((data) => data.category),
             datasets: [
                 {
                     label: "Expense Analysis",
-                    data: records.map((data) => data.amount),
+                    data: dataSet.map((data) => data.amount),
                     backgroundColor: [
                             "rgba(75,192,192,1)",
                         "#ecf0f1",
@@ -72,7 +84,7 @@ export default function Analytics({}) {
                 </div>
                 <div>
 
-                    <h5>Check your monthly budget using the date below</h5>
+                    <h5>Check your spending analysis for a date range</h5>
                     <form className="from_To" onSubmit={handleSubmit}>
                         <div className="from formInput" >
                             <h4>FROM</h4>

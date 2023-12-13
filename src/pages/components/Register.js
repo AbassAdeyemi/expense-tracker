@@ -1,72 +1,92 @@
-import {Input} from "@/pages/components/Input";
+import * as Yup from 'yup'
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 export default function Register({
     onChange,
     handleSubmit,
     values,
+    handleDelete
                                  }) {
 
-    const inputs =[
-        {
-            id:1,
-            name:"fullname",
-            type:"text",
-            placeholder:"Full Name",
-            title:"Fullname should be letters only without any special character!",
-            label:"fullname",
-            pattern:"^[a-zA-Z]+$",
-            required:true
-        },
+    const initialValues = {
+        fullname: "",
+        alias: "",
+        budget: 0
+    }
+    const RegisterSchema = Yup.object().shape({
+        fullname: Yup.string().required("Full Name is required"),
+        alias: Yup.string().required("Nickname is required"),
+        budget: Yup.number().min(1, "Budget must me greater than zero").required("Budget is required")
+    })
 
-        {
-            id:2,
-            name:"alias",
-            type:"text",
-            placeholder:"Nickname",
-         //   errorMessage:"alias should be 4-10 characters",
-            label:"Nickname",
-            required:true
-
-        },
-
-        {
-            id:3,
-            name:"salary",
-            type:"number",
-            placeholder:"Salary",
-            title:"salary should be a valid number",
-            label:"Salary",
-            pattern:"^[1-9][0-9]*$",
-            required:true
-        },
-
-        {
-            id:4,
-            name:"budget",
-            type:"number",
-            placeholder:"Budget",
-            title:"budget should be a valid number",
-            pattern:"^[1-9][0-9]*$",
-            required:true,
-            label:"Budget"
-
-        },
-
-    ]
+    return (
+        <Formik
+            initialValues={initialValues}
+            validationSchema={RegisterSchema}
+            onSubmit={(values) => {
+                console.log(values);
+            }}
+        >
+            {(formik) => {
+                const { errors, touched, isValid, dirty } = formik;
 
     return (
         <div className='register'>
             <form className='registerForm' onSubmit={handleSubmit}>
-                {inputs.map((input)=>(
-                        <Input key={input.id} {...input} value={values[input.name]} onChange={onChange} />
+                <div className='formInput'>
 
-                    )
-                )}
+                    <div className="form-row">
+                       <label htmlFor="fullname"></label>
+                        <Field className= {errors.fullname && touched.fullname ?
+                            "input-error" : null} id= 'registerInput' name='fullname' type='text' placeholder='Full Name' value={values['fullname']} onChange={onChange} />
+                        <ErrorMessage name="fullname" component="span" className="error" />
+                    </div>
 
-                <button className='registerButton'>Register</button>
+
+                    <div className="form-row">
+                        <label htmlFor="alias"></label>
+                        <Field className= {errors.alias && touched.alias ?
+                            "input-error" : null} id= 'registerInput' name='alias' type='text' placeholder='Nickname' value={values['alias']} onChange={onChange} />
+                        <ErrorMessage name="alias" component="span" className="error" />
+                    </div>
+
+                    <div className="form-row">
+                        <label htmlFor="budget"></label>
+                        <Field className= {errors.budget && touched.budget ?
+                            "input-error" : null} id= 'registerInput' name='budget' type='number' placeholder='Budget' value={values['budget']} onChange={onChange} />
+                        <ErrorMessage name="budget" component="span" className="error" />
+                    </div>
+
+
+                    <div className="form-row">
+                        <label htmlFor="currency"></label>
+                        <Field as='select' id='registerInput' name='currency'  value={values['category']} onChange={onChange} >
+                            <option value="" disabled selected hidden>Choose a currency...</option>
+                        <option value="NGN">NGN</option>
+                        <option value="USD">USD</option>
+                    </Field>
+                    </div>
+
+
+                    {/*<input className='registerInput' name='alias' type='text' placeholder='Nickname' value={values['alias']} onChange={onChange} />*/}
+                    {/*<input className='registerInput' name='budget' type='number' placeholder='Budget' value={values['budget']} onChange={onChange} />*/}
+                    {/*<select  className='registerInput' name="currency"  value={values["currency"]} onChange={onChange}>*/}
+                    {/*    <option value="" disabled selected hidden>Choose a currency...</option>*/}
+                    {/*    <option value="NGN">NGN</option>*/}
+                    {/*    <option value="USD">USD</option>*/}
+                    {/*</select>*/}
+                </div>
+
+                <button className="registerButton">Register</button>
 
             </form>
+            <div className="del_user">
+                <button  onClick={handleDelete}>Delete your Info</button>
+            </div>
         </div>
 
     )
+            }}
+        </Formik>
+            )
 }

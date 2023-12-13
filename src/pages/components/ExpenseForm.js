@@ -15,6 +15,7 @@ export default function ExpenseForm({onChange, values, handleSubmit}) {
                 </div>
                 <div className="new-expense__control">
                     <select  name="category"  value={values["category"]} onChange={onChange}>
+                        <option value="" disabled selected hidden>Category</option>
                         <option value="food">Food</option>
                         <option value="housing">Housing</option>
                         <option value="shopping">Shopping</option>
