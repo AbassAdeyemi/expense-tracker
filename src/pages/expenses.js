@@ -55,7 +55,6 @@ export default function Expenses() {
         <div className="new-expense">
             <ExpenseForm handleSubmit={onSubmit} onChange={onChange} values={formValues}/>
             <ExpenseItems expenses={expenses} handleDelete={deleteExpense}/>
-            <button onClick={() => Router.push('/analytics')}>Analysis</button>
         </div>
     </div>
 }

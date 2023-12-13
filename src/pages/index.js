@@ -8,6 +8,7 @@ export default function Home() {
     const [web5, setWeb5] = useState(null)
     const [did, setDid] = useState(null)
     const [protocolInstalled, setProtocolInstalled] = useState(false)
+    const [isExistingUser, setIsExistingUser] = useState(false)
 
     const [formValues, setFormValues]
         = useState({
@@ -30,6 +31,8 @@ export default function Home() {
 
             if (web5 && did) {
                 await configureProtocol(web5, did);
+                const records = await UserHelper.fetchUserInfo(web5);
+                setIsExistingUser(records.length > 0)
             }
         };
         initWeb5();
@@ -117,6 +120,7 @@ export default function Home() {
         setFormValues(formValues)
         const records = await UserHelper.fetchUserInfo(web5);
         if(records.length > 0) {
+            setIsExistingUser(true)
             await Router.push("/expenses")
         }
     }
@@ -127,6 +131,7 @@ export default function Home() {
                           values={formValues}
                           handleSubmit={handleSubmit}
                           handleDelete={handleDelete}
+                          isExistingUser={isExistingUser}
                 />
 
         </div>

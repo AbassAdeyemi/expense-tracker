@@ -5,7 +5,8 @@ export default function Register({
     onChange,
     handleSubmit,
     values,
-    handleDelete
+    handleDelete,
+    isExistingUser
                                  }) {
 
     const initialValues = {
@@ -18,6 +19,13 @@ export default function Register({
         alias: Yup.string().required("Nickname is required"),
         budget: Yup.number().min(1, "Budget must me greater than zero").required("Budget is required")
     })
+
+    const formValues = values? values : {
+        "fullname": "",
+        "alias": "",
+        "budget": "",
+        "currency": ""
+    }
 
     return (
         <Formik
@@ -38,7 +46,7 @@ export default function Register({
                     <div className="form-row">
                        <label htmlFor="fullname"></label>
                         <Field className= {errors.fullname && touched.fullname ?
-                            "input-error" : null} id= 'registerInput' name='fullname' type='text' placeholder='Full Name' value={values['fullname']} onChange={onChange} />
+                            "input-error" : null} id= 'registerInput' name='fullname' type='text' placeholder='Full Name' value={formValues['fullname']} onChange={onChange} />
                         <ErrorMessage name="fullname" component="span" className="error" />
                     </div>
 
@@ -46,21 +54,21 @@ export default function Register({
                     <div className="form-row">
                         <label htmlFor="alias"></label>
                         <Field className= {errors.alias && touched.alias ?
-                            "input-error" : null} id= 'registerInput' name='alias' type='text' placeholder='Nickname' value={values['alias']} onChange={onChange} />
+                            "input-error" : null} id= 'registerInput' name='alias' type='text' placeholder='Nickname' value={formValues['alias']} onChange={onChange} />
                         <ErrorMessage name="alias" component="span" className="error" />
                     </div>
 
                     <div className="form-row">
                         <label htmlFor="budget"></label>
                         <Field className= {errors.budget && touched.budget ?
-                            "input-error" : null} id= 'registerInput' name='budget' type='number' placeholder='Budget' value={values['budget']} onChange={onChange} />
+                            "input-error" : null} id= 'registerInput' name='budget' type='number' placeholder='Budget' value={formValues['budget']} onChange={onChange} />
                         <ErrorMessage name="budget" component="span" className="error" />
                     </div>
 
 
                     <div className="form-row">
                         <label htmlFor="currency"></label>
-                        <Field as='select' id='registerInput' name='currency'  value={values['category']} onChange={onChange} >
+                        <Field as='select' id='registerInput' name='currency'  value={formValues['currency']} onChange={onChange} >
                             <option value="" disabled selected hidden>Choose a currency...</option>
                         <option value="NGN">NGN</option>
                         <option value="USD">USD</option>
@@ -80,9 +88,12 @@ export default function Register({
                 <button className="registerButton">Register</button>
 
             </form>
-            <div className="del_user">
-                <button  onClick={handleDelete}>Delete your Info</button>
-            </div>
+            { isExistingUser ?
+                <div className="del_user">
+                    <button onClick={handleDelete}>Delete your existing info</button>
+                </div>
+                : <p></p>
+            }
         </div>
 
     )

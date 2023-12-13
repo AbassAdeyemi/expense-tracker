@@ -11,6 +11,10 @@ export class UserHelper {
     }
 
     static writeUserInfoToDwn = async (web5, userInfo) => {
+        const existing = await UserHelper.fetchUserInfo(web5)
+        if(existing.length > 0) {
+          return;
+        }
         await web5.dwn.records.write({
             data: userInfo,
             message: {
